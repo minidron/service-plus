@@ -1,0 +1,164 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static crm_tags %}
+
+{% block title %}Просмотр заявки № {{ object.pk }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} review-form{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
+&rsaquo; Просмотр
+</div>
+{% endblock %}
+
+
+{% block content %}
+    <form action="" method="POST">{% csrf_token %}
+    <div id="content-main">
+        <fieldset class="module intro">
+            <div class="field-box">
+                <strong>Принят:</strong> {{ object.created }}
+            </div>
+
+            <div class="field-box">
+                <strong>Предполагаемая дата готовности:</strong> {{ object.estimated_date }} {% if object.is_urgently %}(<span class="is_urgently">Срочно!</span>){% endif %}
+            </div>
+
+            <div class="field-box">
+                <strong>Предполагаемая стоимость:</strong> {{ object.estimated_cost|price }}
+            </div>
+        </fieldset>
+
+        <div class="side-left">
+            {# CLIENT #}
+            <div class="module aligned panel panel-client">
+                <h2>Клиент</h2>
+                <div class="form-row">
+                    <label>ФИО</label>
+                    <p>{{ object.client_name }}
+                    {% if booking.client_characteristic %}
+                        ({{ booking.client_characteristic }})
+                    {% endif %}</p>
+                </div>
+
+                {% if object.client_phone %}
+                    <div class="form-row">
+                        <label>Телефон</label>
+                        <p>{{ object.client_phone }}</p>
+                    </div>
+                {% endif %}
+
+                {% if object.client_email %}
+                    <div class="form-row">
+                        <label>Email</label>
+                        <p><a href="mailto:{{ object.client_email }}">{{ object.client_email }}</a></p>
+                    </div>
+                {% endif %}
+
+                {% if object.client_address %}
+                    <div class="form-row">
+                        <label>Адрес</label>
+                        <p>{{ object.client_address }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {# ------ #}
+
+            {# DEVICE #}
+            <div class="module aligned panel panel-device">
+                <h2>Устройство</h2>
+                {% if object.imei %}
+                    <div class="form-row">
+                        <label>IMEI</label>
+                        <p>{{ object.imei }}
+                    </div>
+                {% endif %}
+
+                {% if object.brand or object.model %}
+                    <div class="form-row">
+                        <label>Модель</label>
+                        <p>{{ object.brand }} {{ object.model }}</p>
+                    </div>
+                {% endif %}
+
+                {% if object.kit %}
+                    <div class="form-row">
+                        <label>Комплект</label>
+                        <p>{{ object.kit }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {# ------ #}
+
+            {# PROBLEM #}
+            <div class="module aligned panel panel-problem">
+                <h2>Неисправность</h2>
+                {% if object.problem %}
+                    <div class="form-row">
+                        <label>Со слов клиента</label>
+                        {{ object.problem|linebreaks }}
+                    </div>
+                {% endif %}
+
+                {% if object.note %}
+                    <div class="form-row">
+                        <label>Примечание</label>
+                        <p>{{ object.note }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {# ------- #}
+        </div>
+
+        <div class="side-right">
+            {# WORK DONE #}
+            <div class="module aligned panel panel-done">
+                <h2>Выпоненная работа</h2>
+                <div class="form-row">
+                </div>
+            </div>
+            {# --------- #}
+        </div>
+    </div>
+
+    {% with object.available_transitions as transitions %}
+        {% if transitions %}
+            <div class="action-panel">
+                {% if 'repair' in transitions %}
+                    <button type="submit" name="transition" value="repair">В ремонт</button>
+                {% endif %}
+
+                {% if 'wait_agree' in transitions %}
+                    <button type="submit" name="transition" value="wait_agree">Согласовать</button>
+                {% endif %}
+
+                {% if 'wait_parts' in transitions %}
+                    <button type="submit" name="transition" value="wait_parts">Ждать запчасти</button>
+                {% endif %}
+
+                {% if 'reject' in transitions %}
+                    <button type="submit" name="transition" value="reject">Без ремонта</button>
+                {% endif %}
+
+                {% if 'ready' in transitions %}
+                    <span class="action-separator"></span>
+                    <button type="submit" name="transition" value="ready">Готово</button>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    </form>
+{% endblock %}

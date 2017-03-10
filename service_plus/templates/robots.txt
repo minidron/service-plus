@@ -1,0 +1,5 @@
+Host: www.site.ru
+
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
