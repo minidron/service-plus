@@ -1,6 +1,9 @@
 from dal import autocomplete
 
-from crm.models import Brand, Model
+from rest_framework import viewsets
+
+from crm.models import Brand, Model, Job
+from crm.serializers import JobSerializer
 
 
 class BrandAutocomplete(autocomplete.Select2QuerySetView):
@@ -27,3 +30,8 @@ class ModelAutocomplete(autocomplete.Select2QuerySetView):
         elif self.q:
             qs = qs.filter(name__icontains=self.q, brand__name=brand)
         return qs
+
+
+class JobViewSet(viewsets.ModelViewSet):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer

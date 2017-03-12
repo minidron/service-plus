@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'djangobower',
     'pipeline',
     'reversion',
+    'rest_framework',
     'lib',
     'crm',
 )
@@ -113,11 +114,23 @@ STATICFILES_FINDERS += (
 BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
+    'backbone#1.3',
+    'include-media#1.4',
+    'marionette#3.2.0',
     'normalize-scss#3',
-    'include-media#1.4'
+    'underscore#1.8',
 )
 
 # './manage.py bower_install' - install bower apps
+# -----------------------------------------------------------------------------
+
+
+# REST FRAMEWORK SETTINGS -----------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    )
+}
 # -----------------------------------------------------------------------------
 
 
@@ -134,7 +147,26 @@ PIPELINE = {
     'SASS_BINARY': 'sassc',
     'COFFEE_SCRIPT_ARGUMENTS': '-b',
     'STYLESHEETS': {},
-    'JAVASCRIPT': {},
+    'JAVASCRIPT': {
+        'marionette': {
+            'source_filenames': (
+                'bower_components/underscore/underscore-min.js',
+                'bower_components/backbone/backbone-min.js',
+                'bower_components/backbone.radio/build/backbone.radio.min.js',
+                'bower_components/backbone.marionette/lib/backbone.marionette.min.js',  # NOQA
+            ),
+            'output_filename': 'admin/js/marionette.js',
+        },
+        'jobs': {
+            'source_filenames': (
+                'crm/admin/coffee/jobs/app.coffee',
+                'crm/admin/coffee/jobs/models.coffee',
+                'crm/admin/coffee/jobs/views.coffee',
+                'crm/admin/coffee/jobs/start.coffee',
+            ),
+            'output_filename': 'admin/js/jobs.js',
+        },
+    },
     'COMPILERS': (
         'pipeline.compilers.coffee.CoffeeScriptCompiler',
         'pipeline.compilers.sass.SASSCompiler',

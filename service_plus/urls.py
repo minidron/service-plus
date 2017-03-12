@@ -6,8 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic import RedirectView, TemplateView
 
-from crm.views import BrandAutocomplete, ModelAutocomplete
+from rest_framework import routers
 
+from crm.views import BrandAutocomplete, ModelAutocomplete, JobViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'jobs', JobViewSet)
 
 urlpatterns = [
     url(r'^$',
@@ -19,6 +24,7 @@ urlpatterns = [
         RedirectView.as_view(url=staticfiles_storage.url('favicon.ico'),
                              permanent=True)),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^autocomplete/brand/$', login_required(BrandAutocomplete.as_view()),
         name='brand-autocomplete',),
     url(r'^autocomplete/model/$', login_required(ModelAutocomplete.as_view()),

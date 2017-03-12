@@ -26,7 +26,7 @@
 
 
 {% block content %}
-    <form action="" method="POST">{% csrf_token %}
+    <form action="" method="POST">{% csrf_token %}{{ form.non_field_errors }}
     <div id="content-main">
         <fieldset class="module intro">
             <div class="field-box">
@@ -126,8 +126,11 @@
         <div class="side-right">
             {# WORK DONE #}
             <div class="module aligned panel panel-done">
-                <h2>Выпоненная работа</h2>
+                <h2>Выполненная работа</h2>
                 <div class="form-row">
+                    {{ form.done_work }}
+                    {{ form.done_work.errors }}
+                    <div id="jobs"></div>
                 </div>
             </div>
             {# --------- #}
@@ -157,8 +160,16 @@
                     <span class="action-separator"></span>
                     <button type="submit" name="transition" value="ready">Готово</button>
                 {% endif %}
+
+                {% if 'close' in transitions %}
+                    <span class="action-separator"></span>
+                    <button type="submit" name="transition" value="close">Выдать</button>
+                {% endif %}
+
+                <button class="save" type="submit" name="save" value="_continue">Сохранить и продолжить</button>
             </div>
         {% endif %}
     {% endwith %}
+    {{ form.media }}
     </form>
 {% endblock %}

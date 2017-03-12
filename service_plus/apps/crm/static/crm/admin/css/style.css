@@ -161,19 +161,20 @@
    ========================================================================= */
 .review-form #content-main {
     overflow: hidden;
+    max-width: 1200px;
 }
 
 .review-form .side-left {
     float: left;
     padding-right: 20px;
-    width: 50%;
+    width: 45%;
     box-sizing: border-box;
 }
 
 .review-form .side-right {
     float: right;
     padding-left: 20px;
-    width: 50%;
+    width: 55%;
     box-sizing: border-box;
 }
 
@@ -295,6 +296,102 @@
 .review-form .action-panel button:hover {
     border-color: #D4E157;
     background-color: #F9FBE7;
+}
+
+.review-form .action-panel button.save {
+    float: right;
+}
+
+#jobs-form {
+    width: 100%;
+}
+
+#jobs-form thead th {
+    border-top: 0 none;
+    border-bottom: 1px solid #999;
+    color: #000;
+    background-color: transparent;
+}
+
+#jobs-form tfoot td {
+    border-top: 1px solid #999;
+    font-size: 12px;
+    color: #000;
+}
+
+#jobs-form tfoot td.col-title {
+    text-align: right;
+}
+
+#jobs-form tfoot td.col-price {
+    padding-left: 14px;
+}
+
+#jobs-form input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#jobs-form .col-title {
+}
+
+#jobs-form .col-price {
+    width: 70px;
+}
+
+#jobs-form .col-action {
+    width: 60px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#jobs-form .choose-button,
+#jobs-form .delete-button {
+    width: 24px;
+    height: 24px;
+}
+
+#jobs-popup {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#jobs-popup.closed {
+    display: none;
+}
+
+#available-jobs {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 500px;
+    min-height: 200px;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border: 1px solid #CCC;
+    background-color: #FFF;
+}
+
+#available-jobs table {
+    width: 100%;
+}
+
+#jobs-popup .overlay {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 /* ------------------------------------------------------------------------- */
 

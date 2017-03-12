@@ -1,4 +1,6 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models.functions import Now
 
 from django_fsm import FSMField, transition
 
@@ -133,6 +135,10 @@ class Booking(TimeStampedModel):
     estimated_cost = models.IntegerField(
         'предполагаемая стоимость')
 
+    done_work = JSONField(
+        'выполненная работа',
+        blank=True, null=True)
+
     class Meta:
         default_related_name = 'bookings'
         ordering = ['-pk']
@@ -167,6 +173,7 @@ class Booking(TimeStampedModel):
         """
         Готов к выдачи
         """
+        self.ready_date = Now()
 
     @transition(field=state, source=[State.FOR_PAYMENT, State.WITHOUT_REPAIR],
                 target=State.PAYED)
@@ -174,6 +181,7 @@ class Booking(TimeStampedModel):
         """
         Закрыть заявку
         """
+        self.close_date = Now()
 
     def can_repair(self):
         return self.state != 'working'
@@ -184,6 +192,8 @@ class Booking(TimeStampedModel):
         """
         Вернуть в ремонт
         """
+        self.ready_date = None
+        self.close_date = None
 
     @property
     def kit(self):

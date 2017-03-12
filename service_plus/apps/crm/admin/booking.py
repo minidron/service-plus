@@ -10,8 +10,13 @@ from dal import autocomplete
 
 from reversion.admin import VersionAdmin
 
+from crm.forms import BookingForm
 from crm.models import Booking
 from crm.utils import format_price
+
+__all__ = (
+    'BookingAdmin',
+)
 
 
 class BookingAdminForm(forms.ModelForm):
@@ -184,16 +189,24 @@ class BookingAdmin(VersionAdmin):
 
     def review_view(self, request, object_id):
         booking = get_object_or_404(self.get_queryset(request), pk=object_id)
+        form = BookingForm(request.POST or None, instance=booking)
+        info = self.model._meta.app_label, self.model._meta.model_name
         if request.POST:
+            save = request.POST.get('save')
             transition = request.POST.get('transition')
-            getattr(booking, transition)()
-            booking.save()
-            info = self.model._meta.app_label, self.model._meta.model_name
-            return redirect('admin:%s_%s_review' % info, object_id)
+            if form.is_valid():
+                if save == '_continue':
+                    form.save()
+                    return redirect('admin:%s_%s_review' % info, object_id)
+                elif transition:
+                    getattr(form.instance, transition)()
+                    form.instance.save()
+                    return redirect('admin:%s_%s_review' % info, object_id)
         title = (
             '<span class="booking-status %s" title="%s">Заявка № %s</span>' % (
                 booking.state, booking.get_state_display(), booking.pk))
         context = {
+            'form': form,
             'media': self.media,
             'object': booking,
             'opts': self.opts,
