@@ -1,6 +1,6 @@
 from django import forms
 
-from crm.models import Booking
+from crm.models import Booking, State
 
 from pipeline.forms import PipelineFormMedia
 
@@ -26,8 +26,10 @@ class BookingForm(forms.ModelForm):
     def clean_done_work(self):
         data = self.cleaned_data['done_work']
         transition = self.data.get('transition')
-        if self.instance.state == 'working':
+        if self.instance.state == State.WORKING:
             if transition == 'ready' and not data:
                 raise forms.ValidationError(
                     'Необходимо заполнить выполненную работу')
+        else:
+            data = self.instance.done_work
         return data

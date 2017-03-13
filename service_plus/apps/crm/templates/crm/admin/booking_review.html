@@ -19,8 +19,7 @@
 <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
 &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
 &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
-&rsaquo; <a href="{% url opts|admin_urlname:'change' object.pk|admin_urlquote %}">{{ object|truncatewords:"18" }}</a>
-&rsaquo; Просмотр
+&rsaquo; Просмотр заявки № {{ object|truncatewords:"18" }}
 </div>
 {% endblock %}
 
@@ -128,9 +127,13 @@
             <div class="module aligned panel panel-done">
                 <h2>Выполненная работа</h2>
                 <div class="form-row">
-                    {{ form.done_work }}
-                    {{ form.done_work.errors }}
-                    <div id="jobs"></div>
+                    {% if object.state == 'working' %}
+                        {{ form.done_work }}
+                        {{ form.done_work.errors }}
+                        <div id="jobs"></div>
+                    {% else %}
+                        {{ object.done_work }}
+                    {% endif %}
                 </div>
             </div>
             {# --------- #}

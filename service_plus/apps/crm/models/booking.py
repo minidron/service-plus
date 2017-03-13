@@ -8,6 +8,7 @@ from model_utils.models import TimeStampedModel
 
 __all__ = (
     'Booking',
+    'State',
 )
 
 

@@ -20,7 +20,11 @@ def apply_migration(apps, schema_editor):
         create_permissions(app_config, apps=apps, verbosity=0)
         app_config.models_module = None
     create_group(apps, 'Приемщик', [])
-    create_group(apps, 'Мастер', ['change_booking'])
+    create_group(apps, 'Мастер', [
+        'change_booking',
+        'add_brand', 'change_brand', 'delete_brand',
+        'add_model', 'change_model', 'delete_model',
+    ])
 
 
 def revert_migration(apps, schema_editor):

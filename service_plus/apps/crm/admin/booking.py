@@ -1,6 +1,7 @@
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import formats
@@ -37,6 +38,7 @@ class BookingAdmin(VersionAdmin):
     actions = None
     change_list_template = 'crm/admin/booking_change_list.html'
     form = BookingAdminForm
+    list_display_links = None
 
     list_display = (
         'field_id',
@@ -99,16 +101,30 @@ class BookingAdmin(VersionAdmin):
         }),
     )
 
-    readonly_fields = (
-        'state',
-    )
-
-    manager_fieldsets = (
+    master_fieldsets = (
         (None, {
             'fields': (
                 'state',
             ),
         }),
+        ('Устройство', {
+            'fields': (
+                'imei',
+                'brand',
+                'model',
+            ),
+        }),
+        ('Неисправность', {
+            'fields': (
+                'note',
+            ),
+        }),
+    )
+
+    empty_fieldsets = ()
+
+    readonly_fields = (
+        'state',
     )
 
     class Media:
@@ -164,18 +180,46 @@ class BookingAdmin(VersionAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
         action_open = '<a href="%s">открыть</a>' % reverse(
             'admin:%s_%s_review' % info, args=[instance.pk])
-        return mark_safe('%s' % action_open)
+        action_edit = '<a href="%s">изменить</a>' % reverse(
+            'admin:%s_%s_change' % info, args=[instance.pk])
+        return mark_safe(' '.join([action_open, action_edit]))
     field_open.short_description = ''
 
     def get_fieldsets(self, request, obj=None):
         """
         Возвращаем список полей, в зависимости от прав пользователя
         """
-        return super().get_fieldsets(request, obj)
+        fieldsets = super().get_fieldsets(request, obj)
+        user = request.user
+        groups_name = [name for name in user.groups.values_list('name',
+                                                                flat=True)]
+        if user.is_superuser:
+            user_fieldsets = fieldsets
+        elif 'Мастер' in groups_name:
+            user_fieldsets = self.master_fieldsets
+        else:
+            user_fieldsets = self.empty_fieldsets
+        return user_fieldsets
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs.select_related('brand', 'model')
+
+    def response_post_save_add(self, request, obj):
+        response = super().response_post_save_add(request, obj)
+        if isinstance(response, HttpResponseRedirect):
+            info = self.model._meta.app_label, self.model._meta.model_name
+            response['location'] = reverse(
+                'admin:%s_%s_review' % info, args=[obj.pk])
+        return response
+
+    def response_post_save_change(self, request, obj):
+        response = super().response_post_save_change(request, obj)
+        if isinstance(response, HttpResponseRedirect):
+            info = self.model._meta.app_label, self.model._meta.model_name
+            response['location'] = reverse(
+                'admin:%s_%s_review' % info, args=[obj.pk])
+        return response
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
