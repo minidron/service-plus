@@ -2,12 +2,15 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.functions import Now
 
+from dateutil.relativedelta import relativedelta
+
 from django_fsm import FSMField, transition
 
 from model_utils.models import TimeStampedModel
 
 __all__ = (
     'Booking',
+    'Guarantee',
     'State',
 )
 
@@ -35,6 +38,46 @@ class State(object):
     )
 
 
+class Guarantee(models.Model):
+    """
+    Гарантия по заявке
+    """
+    title = models.CharField(
+        'название',
+        max_length=254)
+
+    day = models.PositiveSmallIntegerField(
+        'дней',
+        blank=True, null=True)
+
+    month = models.PositiveSmallIntegerField(
+        'месяцев',
+        blank=True, null=True)
+
+    year = models.PositiveSmallIntegerField(
+        'лет',
+        blank=True, null=True)
+
+    order = models.PositiveIntegerField(
+        u'порядок',
+        default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'гарантия'
+        verbose_name_plural = 'гарантии'
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def relative_data(self):
+        """
+        Промежуток времени, когда длится гарантия
+        """
+        return relativedelta(day=self.day, month=self.month, year=self.year)
+
+
 class Booking(TimeStampedModel):
     """
     Клиентская заявка
@@ -46,6 +89,7 @@ class Booking(TimeStampedModel):
     client = models.ForeignKey(
         'crm.Client',
         verbose_name='клиент',
+        on_delete=models.SET_NULL,
         blank=True, null=True)
 
     client_name = models.CharField(
@@ -76,11 +120,13 @@ class Booking(TimeStampedModel):
     brand = models.ForeignKey(
         'crm.Brand',
         verbose_name='бренд',
+        on_delete=models.SET_NULL,
         blank=True, null=True)
 
     model = models.ForeignKey(
         'crm.Model',
         verbose_name='модель',
+        on_delete=models.SET_NULL,
         blank=True, null=True)
 
     has_device = models.BooleanField(
@@ -138,6 +184,19 @@ class Booking(TimeStampedModel):
 
     done_work = JSONField(
         'выполненная работа',
+        blank=True, null=True)
+
+    guarantee = models.ForeignKey(
+        'crm.Guarantee',
+        verbose_name='гарантия',
+        on_delete=models.SET_NULL,
+        blank=True, null=True)
+
+    master = models.ForeignKey(
+        'auth.User',
+        verbose_name='мастер',
+        on_delete=models.SET_NULL,
+        limit_choices_to={'groups__name': 'Мастер'},
         blank=True, null=True)
 
     class Meta:
@@ -216,3 +275,7 @@ class Booking(TimeStampedModel):
         Доступные статусы
         """
         return [tr.name for tr in self.get_available_state_transitions()]
+
+    @property
+    def done_work_sum(self):
+        return sum(job['price'] for job in self.done_work)

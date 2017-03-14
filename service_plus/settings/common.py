@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'pipeline',
     'reversion',
     'rest_framework',
+    'adminsortable2',
     'lib',
     'crm',
 )

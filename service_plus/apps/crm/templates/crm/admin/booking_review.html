@@ -128,12 +128,42 @@
                 <h2>Выполненная работа</h2>
                 <div class="form-row">
                     {% if object.state == 'working' %}
-                        {{ form.done_work }}
                         {{ form.done_work.errors }}
+                        {{ form.done_work }}
                         <div id="jobs"></div>
                     {% else %}
-                        {{ object.done_work }}
+                        <table id="jobs-form" class="readable">
+                            <thead>
+                                <tr>
+                                    <th>Работа</th><th>Цена</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in object.done_work %}
+                                    <tr>
+                                        <td class="col-title">{{ row.title }}</td>
+                                        <td class="col-price">{{ row.price|price }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="col-title">Сумма за ремонт:</td>
+                                    <td class="col-price">{{ object.done_work_sum|price }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     {% endif %}
+                </div>
+
+                <div class="form-row">
+                    {{ form.guarantee.errors }}
+                    {{ form.guarantee }}
+                </div>
+
+                <div class="form-row">
+                    {{ form.master.errors }}
+                    {{ form.master }}
                 </div>
             </div>
             {# --------- #}

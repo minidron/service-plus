@@ -7,20 +7,28 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.safestring import mark_safe
 
+from adminsortable2.admin import SortableAdminMixin
+
 from dal import autocomplete
 
 from reversion.admin import VersionAdmin
 
-from crm.forms import BookingForm
-from crm.models import Booking
+from crm.forms import BaseBookingForm, BookingForm
+from crm.models import Booking, Guarantee
 from crm.utils import format_price
 
 __all__ = (
     'BookingAdmin',
+    'GuaranteeAdmin',
 )
 
 
-class BookingAdminForm(forms.ModelForm):
+@admin.register(Guarantee)
+class GuaranteeAdmin(SortableAdminMixin, admin.ModelAdmin):
+    pass
+
+
+class BookingAdminForm(BaseBookingForm):
     class Meta:
         widgets = {
             'brand': autocomplete.ModelSelect2(url='brand-autocomplete'),
@@ -99,6 +107,12 @@ class BookingAdmin(VersionAdmin):
                 'estimated_cost',
             ),
         }),
+        ('Работа', {
+            'fields': (
+                'guarantee',
+                'master',
+            ),
+        }),
     )
 
     master_fieldsets = (
@@ -117,6 +131,11 @@ class BookingAdmin(VersionAdmin):
         ('Неисправность', {
             'fields': (
                 'note',
+            ),
+        }),
+        ('Работа', {
+            'fields': (
+                'guarantee',
             ),
         }),
     )

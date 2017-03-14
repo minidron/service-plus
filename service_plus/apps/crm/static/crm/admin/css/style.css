@@ -327,6 +327,10 @@
     padding-left: 14px;
 }
 
+#jobs-form.readable tfoot td.col-price {
+    padding-left: 10px;
+}
+
 #jobs-form input {
     width: 100%;
     box-sizing: border-box;
@@ -394,4 +398,3 @@
     background-color: rgba(255, 255, 255, 0.5);
 }
 /* ------------------------------------------------------------------------- */
-
