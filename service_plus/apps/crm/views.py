@@ -24,11 +24,10 @@ class ModelAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         brand = self.forwarded.get('brand', None)
         qs = Model.objects.all()
-
         if not brand:
             qs = qs.none()
-        elif self.q:
-            qs = qs.filter(name__icontains=self.q, brand__name=brand)
+        else:
+            qs = qs.filter(name__icontains=self.q, brand=brand)
         return qs
 
 
