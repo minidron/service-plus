@@ -1,4 +1,3 @@
-from django import forms
 from django.conf.urls import url
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -262,7 +261,7 @@ class BookingAdmin(VersionAdmin):
                     form.save()
                     return redirect('admin:%s_%s_review' % info, object_id)
                 elif transition:
-                    getattr(form.instance, transition)()
+                    getattr(form.instance, transition)(request.user)
                     form.instance.save()
                     return redirect('admin:%s_%s_review' % info, object_id)
         title = (

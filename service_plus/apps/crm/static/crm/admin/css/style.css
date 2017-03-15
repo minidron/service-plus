@@ -205,6 +205,11 @@
     font-size: 12px;
 }
 
+.review-form .panel p.form-field {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .review-form .panel-client {
     border: 1px solid #9CCC65;
 }
@@ -239,6 +244,15 @@
 .review-form .panel-done > h2 {
     color: #616161;
     background-color: #EEE;
+}
+
+.review-form .panel-total {
+    border: 1px solid #00ACC1;
+}
+
+.review-form .panel-total > h2 {
+    color: #0097A7;
+    background-color: #B2EBF2;
 }
 
 .review-form .module > h2 {

@@ -15,7 +15,7 @@ class Brand(models.Model):
         max_length=254)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-name']
         verbose_name = 'бренд'
         verbose_name_plural = 'бренды'
 
@@ -36,7 +36,7 @@ class Model(models.Model):
         verbose_name='бренд')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-name']
         verbose_name = 'модель'
         verbose_name_plural = 'модели'
 

@@ -1,11 +1,11 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls static crm_tags %}
+{% load i18n admin_urls static crm_tags pipeline %}
 
 {% block title %}Просмотр заявки № {{ object.pk }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
 {% block extrahead %}{{ block.super }}
-<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-{{ media }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {{ media }}
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
@@ -155,15 +155,29 @@
                         </table>
                     {% endif %}
                 </div>
+            </div>
+            {# --------- #}
 
+            {# WORK DONE #}
+            <div class="module aligned panel panel-total">
+                <h2>Итого</h2>
                 <div class="form-row">
-                    {{ form.guarantee.errors }}
-                    {{ form.guarantee }}
+                    <label>Гарантия</label>
+                    <p class="form-field">
+                        {{ form.guarantee.errors }}
+                        {{ form.guarantee }}
+                    </p>
                 </div>
-
                 <div class="form-row">
-                    {{ form.master.errors }}
-                    {{ form.master }}
+                    <label>Мастер</label>
+                    <p class="form-field">
+                        {{ form.master.errors }}
+                        {{ form.master }}
+                    </p>
+                </div>
+                <div class="form-row">
+                    <label>Полная сумма</label>
+                    <p>{{ object.total_sum|price }}</p>
                 </div>
             </div>
             {# --------- #}
@@ -204,5 +218,9 @@
         {% endif %}
     {% endwith %}
     {{ form.media }}
+    {% if object.state == 'working' %}
+        {% javascript 'marionette' %}
+        {% javascript 'jobs' %}
+    {% endif %}
     </form>
 {% endblock %}

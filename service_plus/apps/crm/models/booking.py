@@ -199,6 +199,11 @@ class Booking(TimeStampedModel):
         limit_choices_to={'groups__name': 'Мастер'},
         blank=True, null=True)
 
+    spare_parts = models.ManyToManyField(
+        'crm.SparePart',
+        verbose_name='запчасти',
+        through='SparePartCount')
+
     class Meta:
         default_related_name = 'bookings'
         ordering = ['-pk']
@@ -210,34 +215,39 @@ class Booking(TimeStampedModel):
 
     @transition(field=state, source=State.WORKING,
                 target=State.WAITING_FOR_APPROVAL)
-    def wait_agree(self):
+    def wait_agree(self, user=None):
         """
         Согласовать детали ремонта
         """
 
     @transition(field=state, source=State.WORKING,
                 target=State.WAITING_FOR_PARTS)
-    def wait_parts(self):
+    def wait_parts(self, user=None):
         """
         Ждать запчасти
         """
 
     @transition(field=state, source=State.WORKING, target=State.WITHOUT_REPAIR)
-    def reject(self):
+    def reject(self, user=None):
         """
         Ремонт не требуется или невозможен
         """
 
     @transition(field=state, source=State.WORKING, target=State.FOR_PAYMENT)
-    def ready(self):
+    def ready(self, user=None):
         """
         Готов к выдачи
         """
+        if not self.master:
+            groups_name = [name for name in user.groups.values_list('name',
+                                                                    flat=True)]
+            if 'Мастер' in groups_name:
+                self.master = user
         self.ready_date = Now()
 
     @transition(field=state, source=[State.FOR_PAYMENT, State.WITHOUT_REPAIR],
                 target=State.PAYED)
-    def close(self):
+    def close(self, user=None):
         """
         Закрыть заявку
         """
@@ -248,7 +258,7 @@ class Booking(TimeStampedModel):
 
     @transition(field=state, source='*', target=State.WORKING,
                 conditions=[can_repair])
-    def repair(self):
+    def repair(self, user=None):
         """
         Вернуть в ремонт
         """
@@ -279,3 +289,7 @@ class Booking(TimeStampedModel):
     @property
     def done_work_sum(self):
         return sum(job['price'] for job in self.done_work)
+
+    @property
+    def total_sum(self):
+        return self.done_work_sum

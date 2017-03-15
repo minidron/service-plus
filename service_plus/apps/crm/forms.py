@@ -2,8 +2,6 @@ from django import forms
 
 from crm.models import Booking, State
 
-from pipeline.forms import PipelineFormMedia
-
 
 class BaseBookingForm(forms.ModelForm):
     """
@@ -11,7 +9,8 @@ class BaseBookingForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['master'].label_from_instance = self.master_label
+        self.change_field_attribute('master', 'label_from_instance',
+                                    self.master_label)
 
     @staticmethod
     def master_label(obj):
@@ -22,6 +21,19 @@ class BaseBookingForm(forms.ModelForm):
         if not name:
             name = obj.username
         return name
+
+    def change_field_attribute(self, field_name, attribute, value):
+        field = self.fields.get(field_name)
+        if field:
+            setattr(field, attribute, value)
+        return field
+
+    def change_fields_attribute(self, fields_name, attribute, value):
+        fields = []
+        for field_name in fields_name:
+            fields.append(self.change_field_attribute(field_name, attribute,
+                                                      value))
+        return fields
 
 
 class BookingForm(BaseBookingForm):
@@ -38,25 +50,23 @@ class BookingForm(BaseBookingForm):
             'done_work': forms.HiddenInput,
         }
 
-    class Media(PipelineFormMedia):
-        js_packages = (
-            'marionette',
-            'jobs',
-        )
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.instance.state == State.WORKING:
-            self.fields['guarantee'].disabled = True
-            self.fields['master'].disabled = True
+            self.change_fields_attribute(['guarantee', 'master', 'done_work'],
+                                         'disabled', True)
 
     def clean_done_work(self):
+        def price_to_int(obj):
+            if 'price' in obj:
+                obj['price'] = int(obj['price'])
+            return obj
         data = self.cleaned_data['done_work']
+        if data:
+            data = list(map(lambda obj: price_to_int(obj), data))
         transition = self.data.get('transition')
         if self.instance.state == State.WORKING:
             if transition == 'ready' and not data:
                 raise forms.ValidationError(
                     'Необходимо заполнить выполненную работу')
-        else:
-            data = self.instance.done_work
         return data
