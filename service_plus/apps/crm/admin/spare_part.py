@@ -23,6 +23,13 @@ class SparePartAdminForm(forms.ModelForm):
                 url='model-autocomplete', forward=['brand']),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        count = (self.instance.spare_part_counts.exclude(booking__isnull=False)
+                                                .count())
+        if count:
+            self.fields['count'].initial = count
+
 
 @admin.register(SparePartCount)
 class SparePartCountAdmin(admin.ModelAdmin):

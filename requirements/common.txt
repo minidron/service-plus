@@ -24,4 +24,4 @@ pytz==2016.10
 pyyaml==3.12
 raven==5.32.0
 requests==2.13.0
-Werkzeug==0.12
+Werkzeug==0.12.1
