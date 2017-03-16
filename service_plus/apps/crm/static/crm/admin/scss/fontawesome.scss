@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+@import 'bower_components/font-awesome/scss/font-awesome';
+// ----------------------------------------------------------------------------
+
+
+$font-family: 'FontAwesome';
+$font-path:   '../../../bower_components/font-awesome/fonts/';
+
+@font-face {
+    $font-name-safe: 'fontawesome-webfont';
+    $font-name:      'FontAwesome';
+    font-family:     $font-family;
+    font-style:      normal;
+    font-weight:     normal;
+    src: local($font-name-safe), local($font-name),
+         url('#{$font-path}#{$font-name-safe}.woff') format('woff');
+}

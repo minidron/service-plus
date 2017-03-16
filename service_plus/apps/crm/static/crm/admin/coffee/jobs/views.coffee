@@ -49,8 +49,12 @@ class JobsApp.JobView extends Marionette.View
   </td>
 
   <td class="col-action">
-    <button class="choose-button" type="button">+</button>
-    <button class="delete-button" type="button">-</button>
+    <button class="choose-button" type="button" title="Выбрать из списка">
+      <i class="fa fa-list-alt"></i>
+    </button>
+    <button class="delete-button" type="button" title="Удалить">
+      <i class="fa fa-close"></i>
+    </button>
   </td>
   """
 
@@ -127,7 +131,9 @@ class JobsApp.JobsAddView extends Marionette.View
 
   template: _.template """
   <td colspan="3">
-    <button class="add-button" type="button">Добавить</button>
+    <button class="add-button" type="button" title="Добавить новую запись">
+      Добавить ещё
+    </button>
   </td>
   """
 

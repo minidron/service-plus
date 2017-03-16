@@ -363,10 +363,14 @@
     text-align: center;
 }
 
-#jobs-form .choose-button,
-#jobs-form .delete-button {
-    width: 24px;
-    height: 24px;
+#jobs-form button {
+    min-width: 26px;
+    height: 26px;
+    text-align: center;
+}
+
+#jobs-form button.delete-button {
+    color: #B71C1C;
 }
 
 #jobs-popup {
@@ -400,6 +404,11 @@
 
 #available-jobs table {
     width: 100%;
+}
+
+#available-jobs .row:hover {
+    background-color: #EEE;
+    cursor: pointer;
 }
 
 #jobs-popup .overlay {

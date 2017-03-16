@@ -116,6 +116,7 @@ BOWER_COMPONENTS_ROOT = path('static')
 
 BOWER_INSTALLED_APPS = (
     'backbone#1.3',
+    'font-awesome#4.7',
     'include-media#1.4',
     'marionette#3.2.0',
     'normalize-scss#3',
@@ -147,7 +148,14 @@ PIPELINE = {
     'SASS_ARGUMENTS': '--include-path %s' % path('static'),
     'SASS_BINARY': 'sassc',
     'COFFEE_SCRIPT_ARGUMENTS': '-b',
-    'STYLESHEETS': {},
+    'STYLESHEETS': {
+        'fontawesome': {
+            'source_filenames': (
+                'crm/admin/scss/fontawesome.scss',
+            ),
+            'output_filename': 'admin/css/fontawesome.css',
+        },
+    },
     'JAVASCRIPT': {
         'marionette': {
             'source_filenames': (

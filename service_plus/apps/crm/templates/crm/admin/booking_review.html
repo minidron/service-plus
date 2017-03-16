@@ -8,7 +8,11 @@
     {{ media }}
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+    {% stylesheet 'fontawesome' %}
+{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
