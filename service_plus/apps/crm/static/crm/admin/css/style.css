@@ -246,6 +246,15 @@
     background-color: #EEE;
 }
 
+.review-form .panel-spare_part {
+    border: 1px solid #9E9E9E;
+}
+
+.review-form .panel-spare_part > h2 {
+    color: #616161;
+    background-color: #EEE;
+}
+
 .review-form .panel-total {
     border: 1px solid #00ACC1;
 }
@@ -316,64 +325,79 @@
     float: right;
 }
 
-#jobs-form {
+#jobs-form,
+#spare_part-form {
     width: 100%;
 }
 
-#jobs-form thead th {
+#jobs-form thead th,
+#spare_part-form thead th {
     border-top: 0 none;
     border-bottom: 1px solid #999;
     color: #000;
     background-color: transparent;
 }
 
-#jobs-form tfoot td {
+#jobs-form tbody td,
+#spare_part-form tbody td {
+    vertical-align: middle;
+}
+
+#jobs-form tfoot td,
+#spare_part-form tfoot td {
     border-top: 1px solid #999;
     font-size: 12px;
     color: #000;
 }
 
-#jobs-form tfoot td.col-title {
+#jobs-form tfoot td.col-title,
+#spare_part-form tfoot td.col-title {
     text-align: right;
 }
 
-#jobs-form tfoot td.col-price {
+#jobs-form tfoot td.col-price,
+#spare_part-form tfoot td.col-price {
     padding-left: 14px;
 }
 
-#jobs-form.readable tfoot td.col-price {
+#jobs-form.readable tfoot td.col-price,
+#spare_part-form.readable tfoot td.col-price {
     padding-left: 10px;
 }
 
-#jobs-form input {
+#jobs-form input,
+#spare_part-form input {
     width: 100%;
     box-sizing: border-box;
 }
 
-#jobs-form .col-title {
-}
-
-#jobs-form .col-price {
+#jobs-form .col-price,
+#spare_part-form .col-price {
     width: 70px;
 }
 
-#jobs-form .col-action {
+#jobs-form .col-action,
+#spare_part-form .col-action {
     width: 60px;
     vertical-align: middle;
     text-align: center;
 }
 
-#jobs-form button {
-    min-width: 26px;
-    height: 26px;
+#jobs-form button,
+#spare_part-form button {
+    min-width: 24px;
+    height: 24px;
     text-align: center;
+    cursor: pointer;
 }
 
-#jobs-form button.delete-button {
+#jobs-form button.delete-button,
+#spare_part-form button.delete-button {
     color: #B71C1C;
 }
 
-#jobs-popup {
+#jobs-popup,
+#spare_part-popup {
     position: fixed;
     top: 0;
     right: 0;
@@ -381,11 +405,13 @@
     left: 0;
 }
 
-#jobs-popup.closed {
+#jobs-popup.closed,
+#spare_part-popup.closed {
     display: none;
 }
 
-#available-jobs {
+#available-jobs,
+#available-spare_part {
     position: absolute;
     z-index: 2;
     top: 50%;
@@ -402,16 +428,19 @@
     background-color: #FFF;
 }
 
-#available-jobs table {
+#available-jobs table,
+#available-spare_part table {
     width: 100%;
 }
 
-#available-jobs .row:hover {
+#available-jobs .row:hover,
+#available-spare_part .row:hover {
     background-color: #EEE;
     cursor: pointer;
 }
 
-#jobs-popup .overlay {
+#jobs-popup .overlay,
+#spare_part-popup .overlay {
     position: absolute;
     z-index: 1;
     top: 0;

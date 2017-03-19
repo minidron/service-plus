@@ -131,7 +131,10 @@ BOWER_INSTALLED_APPS = (
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAdminUser',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
 # -----------------------------------------------------------------------------
 
@@ -174,6 +177,15 @@ PIPELINE = {
                 'crm/admin/coffee/jobs/start.coffee',
             ),
             'output_filename': 'admin/js/jobs.js',
+        },
+        'spare_part': {
+            'source_filenames': (
+                'crm/admin/coffee/spare_part/app.coffee',
+                'crm/admin/coffee/spare_part/models.coffee',
+                'crm/admin/coffee/spare_part/views.coffee',
+                'crm/admin/coffee/spare_part/start.coffee',
+            ),
+            'output_filename': 'admin/js/spare_part.js',
         },
     },
     'COMPILERS': (

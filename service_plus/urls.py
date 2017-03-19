@@ -8,11 +8,19 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
-from crm.views import BrandAutocomplete, ModelAutocomplete, JobViewSet
+from crm.views import (
+    BrandAutocomplete,
+    JobViewSet,
+    ModelAutocomplete,
+    SparePartCountViewSet,
+    SparePartViewSet,
+)
 
 
 router = routers.DefaultRouter()
 router.register(r'jobs', JobViewSet)
+router.register(r'spare_part', SparePartViewSet)
+router.register(r'spare_part_count', SparePartCountViewSet)
 
 urlpatterns = [
     url(r'^$',

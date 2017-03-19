@@ -12,7 +12,7 @@ class Brand(models.Model):
     """
     name = models.CharField(
         'название',
-        max_length=254)
+        max_length=254, db_index=True)
 
     class Meta:
         ordering = ['-name']
@@ -29,7 +29,7 @@ class Model(models.Model):
     """
     name = models.CharField(
         'название',
-        max_length=254)
+        max_length=254, db_index=True)
 
     brand = models.ForeignKey(
         'crm.Brand',

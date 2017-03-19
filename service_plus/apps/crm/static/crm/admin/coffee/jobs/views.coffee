@@ -4,7 +4,7 @@ class JobsApp.AvailableJobView extends Marionette.View
 
   template: _.template """
   <td class="col-title"><%= title %></td>
-  <td class="col-price"><%= price %></td>
+  <td class="col-price"><%- toPrice(price) %></td>
   """
 
   ui:
@@ -126,13 +126,14 @@ class JobsApp.JobsView extends Marionette.CollectionView
     @rootView = options.parent
 
 
+
 class JobsApp.JobsAddView extends Marionette.View
   tagName: 'tr'
 
   template: _.template """
   <td colspan="3">
     <button class="add-button" type="button" title="Добавить новую запись">
-      Добавить ещё
+      <i class="fa fa-plus"></i> Добавить
     </button>
   </td>
   """
@@ -155,15 +156,14 @@ class JobsApp.JobsPriceView extends Marionette.View
   tagName: 'tr'
   template: _.template """
   <td class="col-title">Сумма за ремонт:</td>
-  <td class="col-price"><%= price %> р.</td>
+  <td class="col-price"><%- toPrice(price) %></td>
   <td class="col-action"></td>
   """
 
   templateContext: ->
     price: @price
 
-  onPrice: (price) ->
-    @price = price.toString().replace /\B(?=(\d{3})+(?!\d))/g, ' '
+  onPrice: (@price) ->
     @render()
 
   initialize: (options) ->
@@ -228,10 +228,10 @@ class JobsApp.RootView extends Marionette.View
       el: '#available-jobs'
 
   onRender: ->
-    @showChildView 'jobsForm', new JobsApp.JobsView {parent: this}
-    @showChildView 'jobsFormAdd', new JobsApp.JobsAddView {parent: this}
-    @showChildView 'jobsFullPrice', new JobsApp.JobsPriceView {parent: this}
-    @showChildView 'jobsPopup', new JobsApp.AvailableJobsView {parent: this}
+    @showChildView 'jobsForm', new JobsApp.JobsView {parent: @}
+    @showChildView 'jobsFormAdd', new JobsApp.JobsAddView {parent: @}
+    @showChildView 'jobsFullPrice', new JobsApp.JobsPriceView {parent: @}
+    @showChildView 'jobsPopup', new JobsApp.AvailableJobsView {parent: @}
 
   initialize: (options) ->
     @listenTo @, 'open:popup', @onOpenPopup

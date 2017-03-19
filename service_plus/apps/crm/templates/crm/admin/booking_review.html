@@ -29,7 +29,7 @@
 
 
 {% block content %}
-    <form action="" method="POST">{% csrf_token %}{{ form.non_field_errors }}
+    <form action="" method="POST" data-csrf="{{ token.value }}">{% csrf_token %}{{ form.non_field_errors }}
     <div id="content-main">
         <fieldset class="module intro">
             <div class="field-box">
@@ -93,7 +93,7 @@
                 {% if object.brand or object.model %}
                     <div class="form-row">
                         <label>Модель</label>
-                        <p>{{ object.brand }} {{ object.model }}</p>
+                        <p id="device-model" data-brand="{{ object.brand_id }}" data-model="{{ object.model_id }}">{{ object.brand }} {{ object.model }}</p>
                     </div>
                 {% endif %}
 
@@ -162,7 +162,16 @@
             </div>
             {# --------- #}
 
-            {# WORK DONE #}
+            {# SPARE PART #}
+            <div class="module aligned panel panel-spare_part">
+                <h2>Замененные детали</h2>
+                <div class="form-row">
+                    <div id="spare_part"></div>
+                </div>
+            </div>
+            {# --------- #}
+
+            {# TOTAL #}
             <div class="module aligned panel panel-total">
                 <h2>Итого</h2>
                 <div class="form-row">
@@ -225,6 +234,7 @@
     {% if object.state == 'working' %}
         {% javascript 'marionette' %}
         {% javascript 'jobs' %}
+        {% javascript 'spare_part' %}
     {% endif %}
     </form>
 {% endblock %}

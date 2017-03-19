@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch import receiver
 
+
 __all__ = (
     'SparePart',
     'SparePartCount',
@@ -104,7 +105,10 @@ class SparePart(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        count = kwargs.pop('count', None)
         super().save(*args, **kwargs)
+        post_save.send(sender=self.__class__, instance=self, created=True,
+                       count=count)
 
 
 @receiver(pre_save, sender=SparePart)
@@ -113,8 +117,7 @@ def delete_spare_part_counts(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=SparePart)
-def create_spare_part_counts(sender, instance, created, **kwargs):
-    count = kwargs.pop('count', None)
+def create_spare_part_counts(sender, instance, created, count=None, **kwargs):
     if count:
         obj = SparePartCount(spare_part=instance, title=instance.title,
                              brand=instance.brand, model=instance.model,

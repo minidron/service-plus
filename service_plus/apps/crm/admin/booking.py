@@ -221,7 +221,7 @@ class BookingAdmin(VersionAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('brand', 'model')
+        return qs.select_related('brand', 'guarantee', 'master', 'model')
 
     def response_post_save_add(self, request, obj):
         response = super().response_post_save_add(request, obj)
@@ -265,8 +265,10 @@ class BookingAdmin(VersionAdmin):
                     form.instance.save()
                     return redirect('admin:%s_%s_review' % info, object_id)
         title = (
-            '<span class="booking-status %s" title="%s">Заявка № %s</span>' % (
-                booking.state, booking.get_state_display(), booking.pk))
+            '<span class="booking-status %s" title="%s" '
+            'data-booking-id="%s">Заявка № %s</span>' % (
+                booking.state, booking.get_state_display(), booking.pk,
+                booking.pk))
         context = {
             'form': form,
             'media': self.media,
