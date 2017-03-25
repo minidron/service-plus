@@ -6,34 +6,47 @@ class SparePartApp.RootView extends Marionette.View
   <table id="spare_part-form">
     <thead>
       <tr>
-        <th>Работа</th>
+        <th>Запчасть</th>
         <th>Цена</th>
         <th></th>
       </tr>
     </thead>
 
-    <tbody></tbody>
+    <tbody id="spare_part-list"></tbody>
 
     <tfoot>
-      <tr id="spare_part-form-add"></tr>
+      <tr id="spare_part-add"></tr>
       <tr id="spare_part-price"></tr>
     </tfoot>
   </table>
+
   <div id="spare_part-popup" class="closed">
-    <div id="available-spare_part"></div>
+    <div id="available-spare_part">
+      <table>
+        <thead>
+          <tr>
+            <th>Запчасть</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+          </tr>
+        </thead>
+        <tbody id="available-spare_part-list"></tbody>
+      </table>
+    </div>
     <div class="overlay"></div>
   </div>
   """
 
   regions:
     sparePartForm:
-      el: 'tbody'
+      el: '#spare_part-list'
       replaceElement: true
     sparePartAdd:
-      el: '#spare_part-form-add'
+      el: '#spare_part-add'
       replaceElement: true
     popup:
-      el: '#available-spare_part'
+      el: '#available-spare_part-list'
+      replaceElement: true
     price:
       el: '#spare_part-price'
       replaceElement: true
@@ -77,7 +90,7 @@ class SparePartApp.SparePartPriceView extends Marionette.View
   ###
   tagName: 'tr'
   template: _.template """
-  <td class="col-title">Сумма за ремонт:</td>
+  <td class="col-title">Сумма за запчасти:</td>
   <td class="col-price"><%- toPrice(price) %></td>
   <td class="col-action"></td>
   """
@@ -88,6 +101,7 @@ class SparePartApp.SparePartPriceView extends Marionette.View
   onChangePrice: (@price) ->
     if not @price
       @price = 0
+    @trigger 'change:price'
     @render()
 
   initialize: (options) ->
@@ -223,7 +237,7 @@ class SparePartApp.SparePartsView extends Marionette.CollectionView
   ###
   childView: SparePartApp.SparePartView
   collection: spareParts
-  tagName: 'table'
+  tagName: 'tbody'
 
   childViewOptions: ->
     parent: @

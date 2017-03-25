@@ -169,23 +169,19 @@ PIPELINE = {
             ),
             'output_filename': 'admin/js/marionette.js',
         },
-        'jobs': {
+        'crm_app': {
             'source_filenames': (
                 'crm/admin/coffee/jobs/app.coffee',
                 'crm/admin/coffee/jobs/models.coffee',
                 'crm/admin/coffee/jobs/views.coffee',
                 'crm/admin/coffee/jobs/start.coffee',
-            ),
-            'output_filename': 'admin/js/jobs.js',
-        },
-        'spare_part': {
-            'source_filenames': (
                 'crm/admin/coffee/spare_part/app.coffee',
                 'crm/admin/coffee/spare_part/models.coffee',
                 'crm/admin/coffee/spare_part/views.coffee',
                 'crm/admin/coffee/spare_part/start.coffee',
+                'crm/admin/coffee/full_price/app.coffee',
             ),
-            'output_filename': 'admin/js/spare_part.js',
+            'output_filename': 'admin/js/crm_app.js',
         },
     },
     'COMPILERS': (

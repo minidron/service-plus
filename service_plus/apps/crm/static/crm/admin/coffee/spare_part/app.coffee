@@ -8,5 +8,6 @@ class SparePartApp extends Marionette.Application
   region: '#spare_part'
 
   onStart: ->
-    @showView new SparePartApp.RootView()
+    window.sparePartRootView = new SparePartApp.RootView()
+    @showView window.sparePartRootView
     bookingSpareParts.fetch()

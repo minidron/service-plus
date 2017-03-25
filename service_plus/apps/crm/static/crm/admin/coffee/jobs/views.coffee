@@ -164,6 +164,7 @@ class JobsApp.JobsPriceView extends Marionette.View
     price: @price
 
   onPrice: (@price) ->
+    @trigger 'change:price'
     @render()
 
   initialize: (options) ->

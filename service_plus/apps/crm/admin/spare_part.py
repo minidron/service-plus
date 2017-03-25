@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 
 from dal import autocomplete
 
-from crm.models import SparePart, SparePartCount
+from crm.models import SparePart
 
 __all__ = (
     'SparePartAdmin',
@@ -29,14 +29,6 @@ class SparePartAdminForm(forms.ModelForm):
                                                 .count())
         if count:
             self.fields['count'].initial = count
-
-
-@admin.register(SparePartCount)
-class SparePartCountAdmin(admin.ModelAdmin):
-    """
-    Удалить после создании виджета
-    """
-    pass
 
 
 @admin.register(SparePart)

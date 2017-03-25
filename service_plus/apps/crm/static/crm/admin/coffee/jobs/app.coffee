@@ -8,5 +8,6 @@ class JobsApp extends Marionette.Application
   region: '#jobs'
 
   onStart: ->
-    @showView new JobsApp.RootView()
+    window.jobRootView = new JobsApp.RootView()
+    @showView window.jobRootView
     jobs.fetch()

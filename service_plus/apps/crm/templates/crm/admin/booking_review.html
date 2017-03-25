@@ -124,6 +124,30 @@
                 {% endif %}
             </div>
             {# ------- #}
+
+            {# TOTAL #}
+            <div class="module aligned panel panel-total">
+                <h2>Итого</h2>
+                <div class="form-row">
+                    <label>Гарантия</label>
+                    <p class="form-field">
+                        {{ form.guarantee.errors }}
+                        {{ form.guarantee }}
+                    </p>
+                </div>
+                <div class="form-row">
+                    <label>Мастер</label>
+                    <p class="form-field">
+                        {{ form.master.errors }}
+                        {{ form.master }}
+                    </p>
+                </div>
+                <div class="form-row">
+                    <label>Полная сумма</label>
+                    <p id="booking-full-price">{{ object.total_sum|price }}</p>
+                </div>
+            </div>
+            {# --------- #}
         </div>
 
         <div class="side-right">
@@ -166,31 +190,31 @@
             <div class="module aligned panel panel-spare_part">
                 <h2>Замененные детали</h2>
                 <div class="form-row">
-                    <div id="spare_part"></div>
-                </div>
-            </div>
-            {# --------- #}
-
-            {# TOTAL #}
-            <div class="module aligned panel panel-total">
-                <h2>Итого</h2>
-                <div class="form-row">
-                    <label>Гарантия</label>
-                    <p class="form-field">
-                        {{ form.guarantee.errors }}
-                        {{ form.guarantee }}
-                    </p>
-                </div>
-                <div class="form-row">
-                    <label>Мастер</label>
-                    <p class="form-field">
-                        {{ form.master.errors }}
-                        {{ form.master }}
-                    </p>
-                </div>
-                <div class="form-row">
-                    <label>Полная сумма</label>
-                    <p>{{ object.total_sum|price }}</p>
+                    {% if object.state == 'working' %}
+                        <div id="spare_part"></div>
+                    {% else %}
+                        <table id="spare_part-form" class="readable">
+                            <thead>
+                                <tr>
+                                    <th>Работа</th><th>Цена</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in object.spare_part_counts.all %}
+                                    <tr>
+                                        <td class="col-title">{{ row.title }}</td>
+                                        <td class="col-price">{{ row.retail_price|price }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="col-title">Сумма за запчасти:</td>
+                                    <td class="col-price">{{ object.spare_part_sum|price }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    {% endif %}
                 </div>
             </div>
             {# --------- #}
@@ -233,8 +257,7 @@
     {{ form.media }}
     {% if object.state == 'working' %}
         {% javascript 'marionette' %}
-        {% javascript 'jobs' %}
-        {% javascript 'spare_part' %}
+        {% javascript 'crm_app' %}
     {% endif %}
     </form>
 {% endblock %}
