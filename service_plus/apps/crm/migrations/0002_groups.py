@@ -19,7 +19,18 @@ def apply_migration(apps, schema_editor):
         app_config.models_module = True
         create_permissions(app_config, apps=apps, verbosity=0)
         app_config.models_module = None
-    create_group(apps, 'Приемщик', [])
+    create_group(apps, 'Кладовщик', [
+        'add_sparepart', 'change_sparepart', 'delete_sparepart',
+        'add_brand', 'change_brand', 'delete_brand',
+        'add_model', 'change_model', 'delete_model',
+    ])
+
+    create_group(apps, 'Приемщик', [
+        'add_booking', 'change_booking',
+        'add_guarantee', 'change_guarantee',
+        'add_job', 'change_job',
+    ])
+
     create_group(apps, 'Мастер', [
         'change_booking',
         'add_brand', 'change_brand', 'delete_brand',
