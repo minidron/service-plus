@@ -106,25 +106,6 @@
             </div>
             {# ------ #}
 
-            {# PROBLEM #}
-            <div class="module aligned panel panel-problem">
-                <h2>Неисправность</h2>
-                {% if object.problem %}
-                    <div class="form-row">
-                        <label>Со слов клиента</label>
-                        {{ object.problem|linebreaks }}
-                    </div>
-                {% endif %}
-
-                {% if object.note %}
-                    <div class="form-row">
-                        <label>Примечание</label>
-                        <p>{{ object.note }}</p>
-                    </div>
-                {% endif %}
-            </div>
-            {# ------- #}
-
             {# TOTAL #}
             <div class="module aligned panel panel-total">
                 <h2>Итого</h2>
@@ -146,11 +127,35 @@
                     <label>Полная сумма</label>
                     <p id="booking-full-price">{{ object.total_sum|price }}</p>
                 </div>
+                <div class="form-row">
+                    <label>Приход</label>
+                    <p id="booking-full-price">{{ object.gain|price }}</p>
+                </div>
             </div>
             {# --------- #}
         </div>
 
         <div class="side-right">
+
+            {# PROBLEM #}
+            <div class="module aligned panel panel-problem">
+                <h2>Неисправность</h2>
+                {% if object.problem %}
+                    <div class="form-row">
+                        <label>Со слов клиента</label>
+                        {{ object.problem|linebreaks }}
+                    </div>
+                {% endif %}
+
+                {% if object.note %}
+                    <div class="form-row">
+                        <label>Примечание</label>
+                        <p>{{ object.note }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {# ------- #}
+
             {# WORK DONE #}
             <div class="module aligned panel panel-done">
                 <h2>Выполненная работа</h2>

@@ -204,6 +204,10 @@ class Booking(TimeStampedModel):
         verbose_name='запчасти',
         through='SparePartCount')
 
+    gain = models.PositiveIntegerField(
+        'полученные деньги',
+        default=0, blank=True, null=True)
+
     class Meta:
         default_related_name = 'bookings'
         ordering = ['-pk']

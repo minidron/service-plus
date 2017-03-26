@@ -110,6 +110,7 @@ class BookingAdmin(VersionAdmin):
             'fields': (
                 'guarantee',
                 'master',
+                'gain',
             ),
         }),
     )
@@ -242,12 +243,22 @@ class BookingAdmin(VersionAdmin):
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         urls = [
+            url(r'^goto/$', self.admin_site.admin_view(self.goto_view),
+                name='%s_%s_goto' % info),
             url(r'^(\d+)/review/$',
                 self.admin_site.admin_view(self.review_view),
                 name='%s_%s_review' % info),
         ]
         urls.extend(super().get_urls())
         return urls
+
+    def goto_view(self, request):
+        booking_id = request.POST.get('booking')
+        info = self.model._meta.app_label, self.model._meta.model_name
+        if booking_id and booking_id.isdigit():
+            booking = get_object_or_404(self.model, pk=booking_id)
+            return redirect('admin:%s_%s_review' % info, booking)
+        return redirect('admin:%s_%s_changelist' % info)
 
     def review_view(self, request, object_id):
         booking = get_object_or_404(self.get_queryset(request), pk=object_id)
