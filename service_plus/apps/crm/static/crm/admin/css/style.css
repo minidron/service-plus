@@ -169,16 +169,20 @@
     max-width: 1200px;
 }
 
+.review-form #content-main .module {
+    margin-bottom: 20px;
+}
+
 .review-form .side-left {
     float: left;
-    padding-right: 20px;
+    padding-right: 10px;
     width: 45%;
     box-sizing: border-box;
 }
 
 .review-form .side-right {
     float: right;
-    padding-left: 20px;
+    padding-left: 10px;
     width: 55%;
     box-sizing: border-box;
 }
@@ -199,6 +203,11 @@
     font-size: 15px;
     font-weight: normal;
     color: #000;
+}
+
+.review-form h1 a {
+    margin-left: 10px;
+    font-size: 12px;
 }
 
 .review-form .panel label {

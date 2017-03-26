@@ -278,11 +278,15 @@ class BookingAdmin(VersionAdmin):
                     getattr(form.instance, transition)(request.user)
                     form.instance.save()
                     return redirect('admin:%s_%s_review' % info, object_id)
+        change_link = ('<a href="%s"><i class="fa fa-edit"></i> '
+                       'Изменить заявку</a>' % (
+                        reverse('admin:%s_%s_change' % info,
+                                args=[object_id])))
         title = (
             '<span class="booking-status %s" title="%s" '
-            'data-booking-id="%s">Заявка № %s</span>' % (
+            'data-booking-id="%s">Заявка № %s</span> %s' % (
                 booking.state, booking.get_state_display(), booking.pk,
-                booking.pk))
+                booking.pk, change_link))
         context = {
             'form': form,
             'media': self.media,
