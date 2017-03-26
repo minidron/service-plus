@@ -28,8 +28,8 @@ class SparePartApp.BookingSpareParts extends Backbone.Collection
   model: SparePartApp.BookingSparePart
 
   url: ->
-    booking_id = parseInt(location.pathname.split( '/' ).filter((e) ->
-      e).slice(-2, -1)[0])
+    booking_el = $ '[data-booking-id]'
+    booking_id = booking_el.data 'bookingId'
     "/api/spare_part_count/?booking=#{booking_id}"
 
 bookingSpareParts = new SparePartApp.BookingSpareParts()
@@ -54,6 +54,10 @@ class SparePartApp.SpareParts extends Backbone.Collection
     filter_el = $ '#device-model'
     brand_id = filter_el.data 'brand'
     model_id = filter_el.data 'model'
+    if not brand_id
+      brand_id = ''
+    if not model_id
+      model_id = ''
     filters = "brand=#{brand_id}&model=#{model_id}"
     "/api/spare_part/?#{filters}"
 
