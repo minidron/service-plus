@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -258,6 +258,9 @@ class BookingAdmin(VersionAdmin):
         if booking_id and booking_id.isdigit():
             booking = get_object_or_404(self.model, pk=booking_id)
             return redirect('admin:%s_%s_review' % info, booking)
+        messages.error(
+            request,
+            'Не удалось открыть заявку. Проверьте правильность номера.')
         return redirect('admin:%s_%s_changelist' % info)
 
     def review_view(self, request, object_id):
