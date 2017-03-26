@@ -44,7 +44,7 @@ class Guarantee(models.Model):
     """
     title = models.CharField(
         'название',
-        max_length=254)
+        max_length=254, db_index=True)
 
     day = models.PositiveSmallIntegerField(
         'дней',

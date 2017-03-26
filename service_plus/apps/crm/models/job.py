@@ -11,7 +11,7 @@ class Job(models.Model):
     """
     title = models.CharField(
         'наименование работы',
-        max_length=254)
+        max_length=254, db_index=True)
 
     price = models.IntegerField(
         'цена',
