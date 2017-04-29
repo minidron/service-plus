@@ -292,7 +292,10 @@ class Booking(TimeStampedModel):
 
     @property
     def done_work_sum(self):
-        return sum(job['price'] for job in self.done_work)
+        done_work_sum = 0
+        if self.done_work:
+            done_work_sum = sum(job['price'] for job in self.done_work)
+        return done_work_sum
 
     @property
     def spare_part_sum(self):

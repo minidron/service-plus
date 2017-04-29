@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'adminsortable2',
     'lib',
     'crm',
+    'documents',
 )
 
 MIDDLEWARE_CLASSES = (

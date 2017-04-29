@@ -8,34 +8,30 @@ from django.views.generic import RedirectView, TemplateView
 
 from rest_framework import routers
 
-from crm.views import (
-    BrandAutocomplete,
-    JobViewSet,
-    ModelAutocomplete,
-    SparePartCountViewSet,
-    SparePartViewSet,
-)
+from crm import views as crm_views
 
 
 router = routers.DefaultRouter()
-router.register(r'jobs', JobViewSet)
-router.register(r'spare_part', SparePartViewSet)
-router.register(r'spare_part_count', SparePartCountViewSet)
+router.register(r'jobs', crm_views.JobViewSet)
+router.register(r'spare_part', crm_views.SparePartViewSet)
+router.register(r'spare_part_count', crm_views.SparePartCountViewSet)
 
 urlpatterns = [
-    url(r'^$',
-        TemplateView.as_view(template_name='index.html'), name='index'),
+    url(r'^$', crm_views.FrontpageView.as_view(), name='index'),
     url(r'^robots.txt$',
         TemplateView.as_view(template_name='robots.txt',
                              content_type='text/plain')),
     url(r'^favicon.ico$',
         RedirectView.as_view(url=staticfiles_storage.url('favicon.ico'),
                              permanent=True)),
+    url(r'^admin/docs/', include('documents.urls', namespace='documents')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(router.urls)),
-    url(r'^autocomplete/brand/$', login_required(BrandAutocomplete.as_view()),
+    url(r'^autocomplete/brand/$',
+        login_required(crm_views.BrandAutocomplete.as_view()),
         name='brand-autocomplete',),
-    url(r'^autocomplete/model/$', login_required(ModelAutocomplete.as_view()),
+    url(r'^autocomplete/model/$',
+        login_required(crm_views.ModelAutocomplete.as_view()),
         name='model-autocomplete',),
 ]
 

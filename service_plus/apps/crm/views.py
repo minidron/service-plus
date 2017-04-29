@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.db.models import Count
+from django.views.generic import RedirectView
 
 from dal import autocomplete
 
@@ -12,6 +14,19 @@ from crm.serializers import (
     SparePartCountSerializer,
     SparePartSerializer,
 )
+
+
+class FrontpageView(RedirectView):
+    """
+    Редирект на список задач
+    """
+    def get_redirect_url(self, *args, **kwargs):
+        tasks_url = reverse('admin:crm_booking_changelist')
+        if self.request.user.is_authenticated():
+            url = tasks_url
+        else:
+            url = reverse('admin:login') + '?next=%s' % tasks_url
+        return url
 
 
 class BrandAutocomplete(autocomplete.Select2QuerySetView):
