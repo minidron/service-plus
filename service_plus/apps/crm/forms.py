@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 
 from crm.models import Booking, State
 
@@ -9,8 +10,11 @@ class BaseBookingForm(forms.ModelForm):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.change_field_attribute('master', 'label_from_instance',
-                                    self.master_label)
+        self.change_field_attribute(
+            'master', 'label_from_instance', self.master_label)
+        self.change_field_attribute(
+            'replacement_device', 'queryset',
+            self.available_replacement_device())
 
     @staticmethod
     def master_label(obj):
@@ -22,6 +26,11 @@ class BaseBookingForm(forms.ModelForm):
             name = obj.username
         return name
 
+    def available_replacement_device(self):
+        qs = self.fields['replacement_device'].queryset.filter(
+            Q(booking__isnull=True) | Q(booking=self.instance))
+        return qs
+
     def change_field_attribute(self, field_name, attribute, value):
         field = self.fields.get(field_name)
         if field:
@@ -31,8 +40,8 @@ class BaseBookingForm(forms.ModelForm):
     def change_fields_attribute(self, fields_name, attribute, value):
         fields = []
         for field_name in fields_name:
-            fields.append(self.change_field_attribute(field_name, attribute,
-                                                      value))
+            fields.append(
+                self.change_field_attribute(field_name, attribute, value))
         return fields
 
 
@@ -44,6 +53,7 @@ class BookingForm(BaseBookingForm):
             'done_work',
             'guarantee',
             'master',
+            'replacement_device',
         )
 
         widgets = {

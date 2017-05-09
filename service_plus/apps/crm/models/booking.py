@@ -208,6 +208,12 @@ class Booking(TimeStampedModel):
         'полученные деньги',
         default=0, blank=True, null=True)
 
+    replacement_device = models.OneToOneField(
+        'crm.ReplacementDevice',
+        verbose_name='устройство на замену',
+        on_delete=models.SET_NULL,
+        blank=True, null=True)
+
     class Meta:
         default_related_name = 'bookings'
         ordering = ['-pk']

@@ -31,8 +31,8 @@ class BookingAdminForm(BaseBookingForm):
     class Meta:
         widgets = {
             'brand': autocomplete.ModelSelect2(url='brand-autocomplete'),
-            'model': autocomplete.ModelSelect2(
-                url='model-autocomplete', forward=['brand']),
+            'model': autocomplete.ModelSelect2(url='model-autocomplete',
+                                               forward=['brand']),
         }
 
 
@@ -108,6 +108,7 @@ class BookingAdmin(VersionAdmin):
         }),
         ('Работа', {
             'fields': (
+                'replacement_device',
                 'guarantee',
                 'master',
                 'gain',
@@ -135,6 +136,7 @@ class BookingAdmin(VersionAdmin):
         }),
         ('Работа', {
             'fields': (
+                'replacement_device',
                 'guarantee',
             ),
         }),
@@ -271,6 +273,10 @@ class BookingAdmin(VersionAdmin):
             save = request.POST.get('save')
             transition = request.POST.get('transition')
             if form.is_valid():
+                if 'Мастер' in request.user.groups.values_list('name',
+                                                               flat=True):
+                    if not form.instance.master:
+                        form.instance.master = request.user
                 if save == '_continue':
                     form.save()
                     return redirect('admin:%s_%s_review' % info, object_id)

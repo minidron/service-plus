@@ -110,6 +110,13 @@
             <div class="module aligned panel panel-total">
                 <h2>Итого</h2>
                 <div class="form-row">
+                    <label>Устройство на замену</label>
+                    <p class="form-field">
+                        {{ form.replacement_device.errors }}
+                        {{ form.replacement_device }}
+                    </p>
+                </div>
+                <div class="form-row">
                     <label>Гарантия</label>
                     <p class="form-field">
                         {{ form.guarantee.errors }}
