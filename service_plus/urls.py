@@ -26,6 +26,7 @@ urlpatterns = [
                              permanent=True)),
     url(r'^admin/docs/', include('documents.urls', namespace='documents')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^1c/', include('odinass.urls', namespace='1c')),
     url(r'^api/', include(router.urls)),
     url(r'^autocomplete/brand/$',
         login_required(crm_views.BrandAutocomplete.as_view()),

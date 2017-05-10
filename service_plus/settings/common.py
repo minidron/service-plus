@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'lib',
     'crm',
     'documents',
+    'odinass',
 )
 
 MIDDLEWARE_CLASSES = (
