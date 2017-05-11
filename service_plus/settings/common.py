@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'reversion',
     'rest_framework',
     'adminsortable2',
+    'mptt',
     'lib',
     'crm',
     'documents',
