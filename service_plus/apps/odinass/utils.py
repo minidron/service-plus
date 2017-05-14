@@ -2,7 +2,7 @@ import os
 
 from xml.etree import cElementTree as ET
 
-from odinass.models import Category
+from odinass.models import Category, Product, Property, PropertyValue
 
 
 def get_text(element):
@@ -19,16 +19,39 @@ class ImportManager(object):
         self.import_all()
 
         for group in self.groups:
-            if group['parent']:
-                parent = Category.objects.get(pk=group['parent'])
-            else:
-                parent = None
-
             Category.objects.update_or_create(
                 id=group['id'], defaults={
                     'title': group['name'],
-                    'parent': parent,
+                    'parent_id': group['parent'],
                 })
+
+        for property in self.properties:
+            Property.objects.update_or_create(
+                id=property['id'], defaults={
+                    'title': property['name'],
+                })
+
+            for option in property['value_options']:
+                PropertyValue.objects.update_or_create(
+                    id=option['id'], defaults={
+                        'title': option['value'],
+                        'property_id': property['id'],
+                    })
+
+        for product in self.products:
+            instance, created = Product.objects.update_or_create(
+                id=product['id'], defaults={
+                    'title': product['name'],
+                    'article': product['article'],
+                })
+            for group in product['groups']:
+                instance.categories.add(Category.objects.get(pk=group))
+
+            for property_value in product['property_values']:
+                if property_value['value']:
+                    instance.property_values.add(PropertyValue.objects.get(
+                        pk=property_value['value'],
+                        property_id=property_value['id']))
 
     def _get_tree(self):
         if self.tree is not None:
@@ -53,7 +76,7 @@ class ImportManager(object):
             self.groups.append({
                 'id': get_text(item.find('Ид')),
                 'name': get_text(item.find('Наименование')),
-                'parent': get_text(parent.find('Ид')) if parent else '',
+                'parent': get_text(parent.find('Ид')) if parent else None,
             })
 
             stack = [(group, item)

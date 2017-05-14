@@ -2,9 +2,24 @@ from django.contrib import admin
 
 from mptt.admin import MPTTModelAdmin
 
-from odinass.models import Category
+from odinass.models import Category, Product, Property, PropertyValue
 
 
 @admin.register(Category)
 class CategoryAdmin(MPTTModelAdmin):
     pass
+
+
+@admin.register(Property)
+class PropertyAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PropertyValue)
+class PropertyValueAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    filter_horizontal = ('categories', 'property_values')
