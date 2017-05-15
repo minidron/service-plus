@@ -205,7 +205,7 @@
     color: #000;
 }
 
-.review-form h1 a {
+.review-form h1:not(#site-name) a {
     margin-left: 10px;
     font-size: 12px;
 }

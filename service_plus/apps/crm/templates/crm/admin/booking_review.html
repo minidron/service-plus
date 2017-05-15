@@ -28,6 +28,18 @@
 {% endblock %}
 
 
+{% block messages %}
+    {{ block.super }}
+    {% with object.available_transitions as transitions %}
+        {% if transitions and object.state == 'for_payment' and 'close' not in transitions %}
+        <ul class="messagelist">
+            <li class="warning">Нельзя закрыть заявку, т.к. клиент не оплатил полную стоимость или не вернул устройство на замену!</li>
+        </ul>
+        {% endif %}
+    {% endwith %}
+{% endblock messages %}
+
+
 {% block content %}
     <form action="" method="POST" data-csrf="{{ token.value }}">{% csrf_token %}{{ form.non_field_errors }}
     <div id="content-main">
@@ -44,6 +56,14 @@
                 <strong>Предполагаемая стоимость:</strong> {{ object.estimated_cost|price }}
             </div>
         </fieldset>
+
+        {% if object.state == 'working' or object.state == 'payed' %}
+        <fieldset class="module intro">
+            <div class="field-box">
+                <strong>Документы:</strong> {% if object.state == 'working' %}<a href="{% url 'documents:receipt' object.pk %}">Квитанция о приёме</a>{% endif %} {% if object.state == 'payed' %}<a href="{% url 'documents:guarantee' object.pk %}">Гарантийный талон</a>{% endif %}
+            </div>
+        </fieldset>
+        {% endif %}
 
         <div class="side-left">
             {# CLIENT #}

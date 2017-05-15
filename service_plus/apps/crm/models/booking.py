@@ -255,8 +255,13 @@ class Booking(TimeStampedModel):
                 self.master = user
         self.ready_date = Now()
 
+    def can_close(self):
+        replacement_device = False if self.replacement_device else True
+        money = self.total_sum == self.gain
+        return all([replacement_device, money])
+
     @transition(field=state, source=[State.FOR_PAYMENT, State.WITHOUT_REPAIR],
-                target=State.PAYED)
+                target=State.PAYED, conditions=[can_close])
     def close(self, user=None):
         """
         Закрыть заявку
