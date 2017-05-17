@@ -151,12 +151,16 @@
                     </p>
                 </div>
                 <div class="form-row">
-                    <label>Полная сумма</label>
+                    <label>Сумма за ремонт</label>
                     <p id="booking-full-price">{{ object.total_sum|price }}</p>
                 </div>
                 <div class="form-row">
                     <label>Приход</label>
-                    <p id="booking-full-price">{{ object.gain|price }}</p>
+                    <p>{{ object.gain|price }}</p>
+                </div>
+                <div class="form-row">
+                    <label>Долг</label>
+                    <p>{{ object.debt|price }}</p>
                 </div>
             </div>
             {# --------- #}

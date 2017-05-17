@@ -257,7 +257,7 @@ class Booking(TimeStampedModel):
 
     def can_close(self):
         replacement_device = False if self.replacement_device else True
-        money = self.total_sum == self.gain
+        money = self.debt == 0
         return all([replacement_device, money])
 
     @transition(field=state, source=[State.FOR_PAYMENT, State.WITHOUT_REPAIR],
@@ -316,3 +316,7 @@ class Booking(TimeStampedModel):
     @property
     def total_sum(self):
         return self.done_work_sum + self.spare_part_sum
+
+    @property
+    def debt(self):
+        return self.total_sum - self.gain

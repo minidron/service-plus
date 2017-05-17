@@ -16,7 +16,7 @@ class Brand(models.Model):
         max_length=254, db_index=True)
 
     class Meta:
-        ordering = ['-name']
+        ordering = ['name']
         verbose_name = 'бренд'
         verbose_name_plural = 'бренды'
 
@@ -37,7 +37,7 @@ class Model(models.Model):
         verbose_name='бренд')
 
     class Meta:
-        ordering = ['-name']
+        ordering = ['name']
         verbose_name = 'модель'
         verbose_name_plural = 'модели'
 
@@ -70,7 +70,7 @@ class ReplacementDevice(models.Model):
         blank=True)
 
     class Meta:
-        ordering = ['-name']
+        ordering = ['name']
         verbose_name = 'устройство на замену'
         verbose_name_plural = 'устройства на замену'
 

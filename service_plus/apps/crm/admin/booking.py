@@ -3,7 +3,7 @@ from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils import formats
+from django.utils import formats, timezone
 from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableAdminMixin
@@ -181,19 +181,22 @@ class BookingAdmin(VersionAdmin):
     field_model.short_description = 'Модель'
 
     def field_created(self, instance):
-        return mark_safe(instance.created.strftime('%d.%m.%Y - %-H:%M'))
+        time = timezone.localtime(instance.created)
+        return mark_safe(time.strftime('%d.%m.%Y - %-H:%M'))
     field_created.admin_order_field = 'created'
     field_created.short_description = 'Принят'
 
     def field_ready_date(self, instance):
         if instance.ready_date:
-            return mark_safe(instance.ready_date.strftime('%d.%m.%Y - %-H:%M'))
+            time = timezone.localtime(instance.ready_date)
+            return mark_safe(time.strftime('%d.%m.%Y - %-H:%M'))
     field_ready_date.admin_order_field = 'ready_date'
     field_ready_date.short_description = 'Готов'
 
     def field_close_date(self, instance):
         if instance.close_date:
-            return mark_safe(instance.close_date.strftime('%d.%m.%Y - %-H:%M'))
+            time = timezone.localtime(instance.close_date)
+            return mark_safe(time.strftime('%d.%m.%Y - %-H:%M'))
     field_close_date.admin_order_field = 'close_date'
     field_close_date.short_description = 'Выдан'
 
