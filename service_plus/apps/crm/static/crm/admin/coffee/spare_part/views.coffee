@@ -151,7 +151,7 @@ class SparePartApp.BookingSparePartView extends Marionette.View
 
   template: _.template """
   <td class="col-title"><%= title %></td>
-  <td class="col-guarantee"><%= typeof(guarantee)!== 'undefined' ? guarantee.title : '-' %></td>
+  <td class="col-guarantee"><%= guarantee ? guarantee.title : '-' %></td>
   <td class="col-price"><%- toPrice(retail_price) %></td>
   <td class="col-action">
     <button class="delete-button" type="button" title="Удалить">
@@ -212,7 +212,7 @@ class SparePartApp.SparePartView extends Marionette.View
 
   template: _.template """
   <td class="col-title"><%= title %></td>
-  <td class="col-guarantee"><%= typeof(guarantee)!== 'undefined' ? guarantee.title : '-' %></td>
+  <td class="col-guarantee"><%= guarantee ? guarantee.title : '-' %></td>
   <td class="col-count"><%= count %></td>
   <td class="col-price"><%- toPrice(retail_price) %></td>
   """
