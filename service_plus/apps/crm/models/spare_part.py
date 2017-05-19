@@ -40,6 +40,12 @@ class SparePartCount(models.Model):
         on_delete=models.SET_NULL,
         blank=True, null=True)
 
+    guarantee = models.ForeignKey(
+        'crm.Guarantee',
+        verbose_name='гарантия',
+        on_delete=models.SET_NULL,
+        blank=True, null=True)
+
     purchase_price = models.PositiveIntegerField(
         'цена закупки',
         default=0)
@@ -86,6 +92,12 @@ class SparePart(models.Model):
         on_delete=models.SET_NULL,
         blank=True, null=True)
 
+    guarantee = models.ForeignKey(
+        'crm.Guarantee',
+        verbose_name='гарантия',
+        on_delete=models.SET_NULL,
+        blank=True, null=True)
+
     purchase_price = models.PositiveIntegerField(
         'цена закупки',
         default=0)
@@ -121,7 +133,8 @@ def create_spare_part_counts(sender, instance, created, count=None, **kwargs):
         obj = SparePartCount(spare_part=instance, title=instance.title,
                              brand=instance.brand, model=instance.model,
                              purchase_price=instance.purchase_price,
-                             retail_price=instance.retail_price)
+                             retail_price=instance.retail_price,
+                             guarantee=instance.guarantee)
         spare_part_counts = [obj for i in range(count)]
         SparePartCount.objects.bulk_create(spare_part_counts)
 

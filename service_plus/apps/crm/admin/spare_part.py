@@ -41,6 +41,7 @@ class SparePartAdmin(admin.ModelAdmin):
         'model',
         'purchase_price',
         'retail_price',
+        'guarantee',
         'field_count',
     )
 

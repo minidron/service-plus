@@ -7,6 +7,7 @@ class SparePartApp.RootView extends Marionette.View
     <thead>
       <tr>
         <th>Запчасть</th>
+        <th>Гарантия</th>
         <th>Цена</th>
         <th></th>
       </tr>
@@ -15,7 +16,7 @@ class SparePartApp.RootView extends Marionette.View
     <tbody id="spare_part-list"></tbody>
 
     <tfoot>
-      <tr id="spare_part-add"></tr>
+      <tr id="spare_part-add" colspan="2"></tr>
       <tr id="spare_part-price"></tr>
     </tfoot>
   </table>
@@ -26,6 +27,7 @@ class SparePartApp.RootView extends Marionette.View
         <thead>
           <tr>
             <th>Запчасть</th>
+            <th>Гарантия</th>
             <th>Кол-во</th>
             <th>Цена</th>
           </tr>
@@ -90,7 +92,7 @@ class SparePartApp.SparePartPriceView extends Marionette.View
   ###
   tagName: 'tr'
   template: _.template """
-  <td class="col-title">Сумма за запчасти:</td>
+  <td class="col-title" colspan="2">Сумма за запчасти:</td>
   <td class="col-price"><%- toPrice(price) %></td>
   <td class="col-action"></td>
   """
@@ -149,6 +151,7 @@ class SparePartApp.BookingSparePartView extends Marionette.View
 
   template: _.template """
   <td class="col-title"><%= title %></td>
+  <td class="col-guarantee"><%= guarantee.title %></td>
   <td class="col-price"><%- toPrice(retail_price) %></td>
   <td class="col-action">
     <button class="delete-button" type="button" title="Удалить">
@@ -209,12 +212,13 @@ class SparePartApp.SparePartView extends Marionette.View
 
   template: _.template """
   <td class="col-title"><%= title %></td>
+  <td class="col-guarantee"><%= guarantee.title %></td>
   <td class="col-count"><%= count %></td>
   <td class="col-price"><%- toPrice(retail_price) %></td>
   """
 
   ui:
-    el: '.col-title, .col-count, .col-price'
+    el: '.col-title, .col-count, .col-guarantee, .col-price'
 
   triggers:
     'click @ui.el': 'select:item'

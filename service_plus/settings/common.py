@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'pipeline',
     'reversion',
     'rest_framework',
+    'django_filters',
     'adminsortable2',
     'lib',
     'crm',

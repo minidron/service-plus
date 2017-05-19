@@ -63,6 +63,7 @@ class Guarantee(models.Model):
         default=0)
 
     class Meta:
+        default_related_name = 'guarantees'
         ordering = ['order']
         verbose_name = 'гарантия'
         verbose_name_plural = 'гарантии'
