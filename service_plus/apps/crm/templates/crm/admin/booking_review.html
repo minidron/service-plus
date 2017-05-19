@@ -232,20 +232,21 @@
                         <table id="spare_part-form" class="readable">
                             <thead>
                                 <tr>
-                                    <th>Работа</th><th>Цена</th>
+                                    <th>Деталь</th><th>Гарантия</th><th>Цена</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for row in object.spare_part_counts.all %}
                                     <tr>
                                         <td class="col-title">{{ row.title }}</td>
+                                        <td class="col-guarantee">{{ row.guarantee.title }}</td>
                                         <td class="col-price">{{ row.retail_price|price }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td class="col-title">Сумма за запчасти:</td>
+                                    <td class="col-title" colspan="2">Сумма за запчасти:</td>
                                     <td class="col-price">{{ object.spare_part_sum|price }}</td>
                                 </tr>
                             </tfoot>
