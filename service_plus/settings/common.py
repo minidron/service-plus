@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_filters',
     'adminsortable2',
+    'templated_docs',
     'lib',
     'crm',
     'documents',

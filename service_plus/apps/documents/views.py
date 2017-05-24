@@ -15,6 +15,7 @@ class BaseDocumentView(DetailView):
     visible_filename = None
 
     def render_to_response(self, context, **response_kwargs):
+        context.update({'user': self.request.user})
         file = fill_template(self.template_name, context,
                              output_format=self.output_format)
         return FileResponse(file, self.visible_filename)
