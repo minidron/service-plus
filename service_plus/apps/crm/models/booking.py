@@ -328,14 +328,14 @@ class Booking(TimeStampedModel):
         for item in self.spare_part_counts.all():
             items.append({
                 'title': item.title,
-                'price': item.retail_price,
-                'guarantee': item.guarantee,
+                'price': item.retail_price or '',
+                'guarantee': item.guarantee or '',
             })
 
         for item in self.done_work:
             items.append({
                 'title': item['title'],
-                'price': item['price'],
+                'price': item['price'] or '',
                 'guarantee': self.guarantee or '',
             })
 
