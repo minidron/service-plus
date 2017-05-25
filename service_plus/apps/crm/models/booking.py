@@ -321,3 +321,22 @@ class Booking(TimeStampedModel):
     @property
     def debt(self):
         return self.total_sum - self.gain
+
+    @property
+    def guarantee_items(self):
+        items = []
+        for item in self.spare_part_counts.all():
+            items.append({
+                'title': item.title,
+                'price': item.retail_price,
+                'guarantee': item.guarantee,
+            })
+
+        for item in self.done_work:
+            items.append({
+                'title': item['title'],
+                'price': item['price'],
+                'guarantee': self.guarantee or '',
+            })
+
+        return items
