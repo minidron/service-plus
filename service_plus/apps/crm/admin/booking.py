@@ -57,6 +57,7 @@ class BookingAdmin(VersionAdmin):
         'field_created',
         'field_ready_date',
         'field_close_date',
+        'field_master',
         'field_open',
     )
 
@@ -208,6 +209,12 @@ class BookingAdmin(VersionAdmin):
             'admin:%s_%s_change' % info, args=[instance.pk])
         return mark_safe(' '.join([action_open, action_edit]))
     field_open.short_description = ''
+
+    def field_master(self, instance):
+        if instance.master:
+            return instance.master.get_full_name()
+    field_master.admin_order_field = 'master__first_name'
+    field_master.short_description = 'Мастер'
 
     def get_fieldsets(self, request, obj=None):
         """
