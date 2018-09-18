@@ -36,22 +36,12 @@ LOGGING = {
     'loggers': {
         'django.db.backends': {
             'level': 'ERROR',
-            'handlers': ['sentry'],
-            'propagate': False,
-        },
-        'raven': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
         },
         'service_plus': {
             'level': 'ERROR',
-            'handlers': ['sentry'],
+            'handlers': ['console'],
             'propagate': False,
         },
     },
